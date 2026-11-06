@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Legalizações — V2 PME</title>
+<style>
+:root{--bg:#f4f6fa;--card:#fff;--txt:#172033;--muted:#697386;--line:#e5e9f0;--blue:#2563eb;--green:#16a34a;--yellow:#d97706;--purple:#7c3aed}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--txt)}
+button,input,select,textarea{font:inherit}button{cursor:pointer}.app{min-height:100vh;display:flex}
+aside{width:235px;background:#111827;color:#fff;padding:22px 16px;position:fixed;inset:0 auto 0 0}.brand{font-size:20px;font-weight:800;padding:8px 10px 25px}.brand small{display:block;color:#9ca3af;font-size:11px;margin-top:5px}
+nav button{width:100%;border:0;background:transparent;color:#cbd5e1;text-align:left;padding:12px;border-radius:9px;margin:3px 0}nav button:hover,nav button.active{background:#1f2937;color:#fff}
+main{margin-left:235px;width:calc(100% - 235px);padding:28px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}h1{margin:0 0 5px;font-size:27px}.sub{color:var(--muted);font-size:14px}
+.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:18px}.card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:17px;box-shadow:0 5px 20px #0f172a0b}.lbl{font-size:11px;color:var(--muted);font-weight:800}.metric{font-size:24px;font-weight:800;margin-top:7px}
+.filters{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr auto;gap:9px;margin-bottom:14px}.field{width:100%;padding:10px 11px;border:1px solid var(--line);border-radius:9px;background:#fff;outline:none}
+.btn{border:0;border-radius:9px;padding:10px 14px;font-weight:800}.primary{background:var(--blue);color:#fff}.light{background:#fff;border:1px solid var(--line)}
+.table{overflow:auto;padding:0}.table table{border-collapse:collapse;width:100%;min-width:1200px}.table th,.table td{padding:13px 14px;border-bottom:1px solid var(--line);text-align:left;font-size:13px}.table th{background:#f8fafc;font-size:10px;color:#64748b;text-transform:uppercase}.eeat{max-width:300px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#475569}.money{font-weight:800;white-space:nowrap}
+.status{padding:6px 9px;border-radius:99px;font-size:11px;font-weight:800;white-space:nowrap}.s0{background:#eef2f7;color:#475569}.s1{background:#dbeafe;color:#1d4ed8}.s2{background:#e0e7ff;color:#4338ca}.s3{background:#fef3c7;color:#92400e}.s4{background:#ede9fe;color:#6d28d9}.s5{background:#dcfce7;color:#15803d}
+.actions{display:flex;gap:5px}.ico{border:1px solid var(--line);background:#fff;border-radius:7px;padding:6px 8px}.empty{text-align:center;color:var(--muted);padding:35px}
+.modal{display:none;position:fixed;inset:0;background:#0f172a80;justify-content:flex-end;z-index:10}.modal.show{display:flex}.drawer{width:min(570px,100%);height:100%;overflow:auto;background:#fff;padding:24px}.head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.full{grid-column:1/-1}.group label{display:block;font-size:11px;font-weight:800;margin-bottom:6px}textarea{min-height:110px;resize:vertical}.approval{display:none;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:12px}.hint{font-size:10px;color:var(--muted);margin-top:4px}.actionsform{display:flex;justify-content:flex-end;gap:8px;border-top:1px solid var(--line);margin-top:15px;padding-top:15px}
+.cards.st{grid-template-columns:repeat(4,1fr)}
+th.sort{cursor:pointer;user-select:none;white-space:nowrap}th.sort:hover{color:#172033}th.sort .ar{margin-left:5px;font-size:10px;opacity:.5}th.sort.on{color:var(--blue)}th.sort.on .ar{opacity:1}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.wide{grid-column:1/-1}.bars{height:220px;display:flex;align-items:end;gap:28px;padding:10px 30px;border-bottom:1px solid var(--line)}.barcol{height:100%;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:end;gap:6px}.bar{width:min(85px,70%);background:var(--blue);border-radius:8px 8px 0 0}.bar.green{background:var(--green)}.bval{font-size:11px;font-weight:800}.blab{font-size:11px;color:var(--muted)}
+.contracts{display:flex;flex-direction:column;gap:13px}.crow{display:grid;grid-template-columns:120px 1fr 160px;gap:10px;align-items:center}.track{height:30px;background:#eef2f7;border-radius:7px;overflow:hidden;display:flex;align-items:center}.fill{height:100%;min-width:3px;background:var(--blue);border-radius:7px 0 0 7px;flex:none}.fa{height:100%;background:var(--green)}.tl{padding-left:9px;font-size:12px;white-space:nowrap;color:var(--txt)}.cv{text-align:right;font-size:12px;font-weight:800}
+.leg{display:flex;gap:16px;font-size:11px;color:var(--muted);margin:2px 0 12px}.leg span:before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;background:var(--blue)}.leg span.g:before{background:var(--green)}
+.levels{display:grid;grid-template-columns:repeat(5,1fr);gap:15px}.level{text-align:center}.lt{height:145px;background:#eef2f7;border-radius:9px;display:flex;align-items:end;overflow:hidden}.lf{width:100%;background:var(--green);border-radius:9px 9px 0 0}.pct{font-size:18px;font-weight:800;margin-top:7px}
+.month{display:flex;gap:9px;margin-bottom:15px}.pmetable{border-collapse:collapse;width:100%}.pmetable th,.pmetable td{padding:12px;border-bottom:1px solid var(--line);text-align:left;font-size:13px}.toast{position:fixed;right:20px;bottom:20px;background:#111827;color:#fff;padding:12px 16px;border-radius:9px;display:none}.toast.show{display:block}
+@media(max-width:1050px){.cards,.cards.st{grid-template-columns:repeat(3,1fr)}.filters{grid-template-columns:2fr 1fr 1fr}.grid2{grid-template-columns:1fr}.wide{grid-column:auto}.levels{grid-template-columns:repeat(3,1fr)}}@media(max-width:700px){aside{position:static;width:100%;height:auto}.app{display:block}main{margin:0;width:100%;padding:16px}.cards,.cards.st{grid-template-columns:1fr 1fr}.formgrid{grid-template-columns:1fr}.full{grid-column:auto}.levels{grid-template-columns:1fr 1fr}}
+
+:root{--bg:#000;--card:#0f1115;--txt:#e8ecf3;--muted:#8b95a7;--line:#252a35;color-scheme:dark}
+aside{background:#07080b;border-right:1px solid var(--line)}nav button:hover,nav button.active{background:#1a1e27}
+.field{background:#0b0d11;color:var(--txt)}.field::placeholder{color:#5b6475}select option{background:#0f1115;color:#e8ecf3}
+.light,.ico{background:#0f1115;color:var(--txt);border-color:var(--line)}
+.table th{background:#0b0d11;color:#8b95a7}.eeat{color:#a3adbd}th.sort:hover{color:#fff}
+.s0{background:#1f2430;color:#cbd5e1}.s1{background:#1e3a8a66;color:#93c5fd}.s2{background:#3730a366;color:#a5b4fc}.s3{background:#78350f80;color:#fcd34d}.s4{background:#5b21b666;color:#c4b5fd}.s5{background:#14532d80;color:#86efac}
+.drawer{background:#0f1115;color:var(--txt)}.approval{background:#052e16;border-color:#14532d}.track,.lt{background:#1c212b}.toast{background:#1f2430}.card{box-shadow:none}
+.cards.st .card:last-child{grid-column:span 2}.cards.st6{grid-template-columns:repeat(6,1fr)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}.chip{border:1px solid var(--line);background:var(--card);color:var(--txt);border-radius:99px;padding:8px 15px;font-weight:800;font-size:12px}.chip.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.gcols{display:flex;gap:22px;padding:8px 6px;overflow-x:auto}.grp{flex:1;min-width:170px}.gbars{height:230px;display:flex;align-items:flex-end;gap:6px;border-bottom:1px solid var(--line)}.gc{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;min-width:0}.gc i{display:block;width:100%;border-radius:5px 5px 0 0;min-height:2px}.gv{font-size:10px;font-weight:800;margin-bottom:3px;text-align:center;line-height:1.15}.gv small{display:block;font-weight:400;color:var(--muted)}.gname{text-align:center;font-weight:800;font-size:13px;margin-top:8px}.gname small{display:block;font-weight:400;color:var(--muted);font-size:11px}
+.leg.l5{flex-wrap:wrap}.leg.l5 span:before{background:var(--c)}
+@media(max-width:1050px){.cards.st .card:last-child{grid-column:auto}.cards.st6{grid-template-columns:repeat(3,1fr)}}@media(max-width:700px){.cards.st6{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside><div class="brand">LEGALIZAÇÕES<small>Controle de demandas • V2 PME</small></div>
+<nav>
+<button id="nDash" class="active" onclick="page('dash')">▦ Dashboard</button>
+<button id="nAn" onclick="page('an')">▥ Análise por contrato</button>
+<button id="nGraph" onclick="page('graph')">◈ Projeção financeira</button>
+<button id="nPME" onclick="page('pme')">R$ PME</button>
+<button onclick="csv()">⇩ Exportar CSV</button>
+</nav></aside>
+<main>
+<section id="dash">
+<div class="top"><div><h1>Controle de Legalizações</h1><div class="sub">Acompanhamento operacional e financeiro • Somente visualização</div></div></div>
+<div class="cards st"><div class="card"><div class="lbl">TOTAL</div><div class="metric" id="total"></div></div><div class="card"><div class="lbl">NÃO INICIADO</div><div class="metric" id="naoiniciado"></div></div><div class="card"><div class="lbl">EM ANÁLISE/PROTOCOLADO</div><div class="metric" id="analise"></div></div><div class="card"><div class="lbl">EM ANDAMENTO</div><div class="metric" id="andamento"></div></div><div class="card"><div class="lbl">AGUARDANDO CLIENTE</div><div class="metric" id="cliente"></div></div><div class="card"><div class="lbl">REGULAR/APROVADO</div><div class="metric" id="aprovados"></div></div><div class="card"><div class="lbl">PROJEÇÃO TOTAL</div><div class="metric" id="projecao"></div></div></div>
+<div class="card"><div class="filters"><input id="q" class="field" placeholder="🔎 Contrato, unidade, OES ou EEAT" oninput="render()"><select id="fs" class="field" onchange="render()"><option value="">Todos os status</option><option>Não iniciado</option><option>Em análise/Protocolado</option><option>Em andamento</option><option>Aguardando cliente</option><option>Regular/Aprovado</option></select><select id="fr" class="field" onchange="render()"><option value="">Todas as revisões</option></select><select id="fc" class="field" onchange="render()"><option value="">Todos os contratos</option></select><input id="fu" class="field" placeholder="Unidade" oninput="render()"><button class="btn light" onclick="resetFilters()">Limpar</button></div></div>
+<div class="card table"><table><thead><tr><th class="sort" data-t="dash" data-k="c">Contrato</th><th class="sort" data-t="dash" data-k="u">Unidade</th><th class="sort" data-t="dash" data-k="o">OES</th><th class="sort" data-t="dash" data-k="s">Status</th><th class="sort" data-t="dash" data-k="dt">Data</th><th class="sort" data-t="dash" data-k="v">Projeção R$</th><th class="sort" data-t="dash" data-k="r">Revisão</th><th class="sort" data-t="dash" data-k="e">EEAT</th><th class="sort" data-t="dash" data-k="a">PME</th></tr></thead><tbody id="body"></tbody></table></div>
+<div class="sub" style="font-size:11px;margin-top:10px">Regra: quando o status passa para Regular/Aprovado, a data informada gera a PME do respectivo mês.</div>
+</section>
+
+<section id="an" style="display:none"><div class="top"><div><h1>Análise por Contrato</h1><div class="sub">Total de unidades e % por status • clique nos contratos para selecionar (um ou vários)</div></div></div>
+<div class="chips" id="chips"></div><div class="cards st6" id="ankpi"></div>
+<div class="grid2"><div class="card wide"><b>Total de unidades por contrato</b><div class="sub">Comparação entre os contratos selecionados</div><div class="contracts" id="anb" style="margin-top:12px"></div></div>
+<div class="card wide"><b>% por status em cada contrato</b><div class="sub">Cada coluna é o % das unidades do contrato naquele status (número menor = unidades)</div><div class="leg l5" id="anleg" style="margin-top:8px"></div><div class="gcols" id="ang"></div></div></div></section>
+
+<section id="graph" style="display:none"><div class="top"><div><h1>Projeção Financeira e PME</h1><div class="sub">PME vigente, projeção e comparação financeira entre contratos</div></div></div>
+<div class="cards"><div class="card"><div class="lbl">UNIDADES</div><div class="metric" id="gu"></div></div><div class="card"><div class="lbl">REGULARES</div><div class="metric" id="gr"></div></div><div class="card"><div class="lbl">% REGULARIDADE</div><div class="metric" id="gp"></div></div><div class="card"><div class="lbl">PROJEÇÃO APROVADA</div><div class="metric" id="ga"></div></div><div class="card"><div class="lbl">PME DO MÊS</div><div class="metric" id="gm"></div></div></div>
+<div class="grid2" style="margin-bottom:16px"><div class="card"><b>PME vigente por contrato</b><div class="sub" id="vsub1"></div><div class="bars" id="vb"></div></div><div class="card"><b>Projeção do mês vigente</b><div class="sub" id="vsub2"></div><div class="bars" id="vp"></div></div></div>
+<div class="grid2"><div class="card"><b>Projeção financeira</b><div class="sub">Total x aprovados</div><div class="bars" id="fb"></div></div><div class="card"><b>PME por competência</b><div class="sub">Valor pela data de aprovação</div><div class="bars" id="pb"></div></div><div class="card wide"><b>Comparação entre contratos</b><div class="sub">CEF CE • CEF DF • CEF RJ LT2 • CEF RJ LT4 • CEF SP</div><div class="leg"><span>Total de unidades</span><span class="g">Aprovadas</span></div><div class="contracts" id="cb"></div></div><div class="card wide"><b>Nível de regularidade por contrato</b><div class="sub">Aprovadas ÷ unidades</div><div class="levels" id="lv"></div></div></div>
+</section>
+
+<section id="pme" style="display:none"><div class="top"><div><h1>Controle PME</h1><div class="sub">Competência financeira da aprovação/regularização</div></div></div>
+<div class="month"><select id="py" class="field" style="width:120px" onchange="renderPME()"></select><select id="pm" class="field" style="width:170px" onchange="renderPME()"></select><select id="pk" class="field" style="width:220px" onchange="renderPME()"><option value="">Todos os contratos</option></select></div>
+<div class="cards"><div class="card"><div class="lbl">PME DA COMPETÊNCIA</div><div class="metric" id="pt"></div></div><div class="card"><div class="lbl">APROVAÇÕES</div><div class="metric" id="pc"></div></div><div class="card"><div class="lbl">PME ACUMULADO</div><div class="metric" id="pa"></div></div></div>
+<div class="card table"><table class="pmetable"><thead><tr><th class="sort" data-t="pme" data-k="c">Contrato</th><th class="sort" data-t="pme" data-k="u">Unidade</th><th class="sort" data-t="pme" data-k="o">OES</th><th class="sort" data-t="pme" data-k="a">Data aprovação</th><th class="sort" data-t="pme" data-k="a">PME</th><th class="sort" data-t="pme" data-k="v">Projeção</th></tr></thead><tbody id="pbody"></tbody></table></div></section>
+</main></div>
+
+<div id="toast" class="toast"></div>
+<script>
+const K="legalizacoes_pme_v2";
+let d=[];
+const ST_OLD={"Protocolado":"Em análise/Protocolado","Em análise":"Em análise/Protocolado"},norm=a=>a.map(x=>ST_OLD[x.s]?{...x,s:ST_OLD[x.s]}:x);d=norm(d);
+const contracts=["CEF CE","CEF DF","CEF RJ LT2","CEF RJ LT4","CEF SP"],months=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+const money=n=>new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL"}).format(+n||0), date=s=>s?s.split("-").reverse().join("/"):"—";
+const approved=x=>x.s==="Regular/Aprovado"&&x.a;
+const pme=s=>s?`PME${s.slice(5,7)} / ${s.slice(0,4)}`:"—";
+const cls=s=>({"Não iniciado":0,"Em análise/Protocolado":1,"Em andamento":2,"Aguardando cliente":3,"Regular/Aprovado":5})[s];
+const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+function persist(){localStorage.setItem(K,JSON.stringify(d))}
+function render(){
+ let q=document.getElementById("q").value.toLowerCase(),s=document.getElementById("fs").value,r=document.getElementById("fr").value,c=document.getElementById("fc").value,u=document.getElementById("fu").value.toLowerCase();
+ let z=d.filter(x=>(!q||[x.c,x.u,x.o,x.e].join(" ").toLowerCase().includes(q))&&(!s||x.s===s)&&(!r||x.r===r)&&(!c||x.c===c)&&(!u||x.u.toLowerCase().includes(u)));
+ z=srt(z,S.dash,sv);document.getElementById("body").innerHTML=z.length?z.map(x=>`<tr><td><b>${esc(x.c)}</b></td><td>${esc(x.u)}</td><td><b>${esc(x.o)||"—"}</b></td><td><span class="status s${cls(x.s)}">${esc(x.s)}</span></td><td>${date(x.dt)}</td><td class="money">${money(x.v)}</td><td><b>${esc(x.r)}</b></td><td class="eeat" title="${esc(x.e)}">${esc(x.e)}</td><td><b>${approved(x)?pme(x.a):"—"}</b></td></tr>`).join(""):`<tr><td colspan="9" class="empty">Nenhuma legalização encontrada.</td></tr>`;
+ const cd=c?d.filter(x=>x.c===c):d,n=s=>cd.filter(x=>x.s===s).length;document.getElementById("total").textContent=cd.length;document.getElementById("naoiniciado").textContent=n("Não iniciado");document.getElementById("andamento").textContent=n("Em andamento");document.getElementById("cliente").textContent=n("Aguardando cliente");document.getElementById("analise").textContent=n("Em análise/Protocolado");document.getElementById("aprovados").textContent=n("Regular/Aprovado");document.getElementById("projecao").textContent=money(cd.reduce((a,x)=>a+(+x.v||0),0));
+ let rs=[...new Set(d.map(x=>x.r))];document.getElementById("fr").innerHTML='<option value="">Todas as revisões</option>'+rs.map(x=>`<option>${esc(x)}</option>`).join("");document.getElementById("fr").value=r;
+ let cs=[...contracts,...new Set(d.map(x=>x.c).filter(y=>!contracts.includes(y)))];document.getElementById("fc").innerHTML='<option value="">Todos os contratos</option>'+cs.map(x=>`<option>${esc(x)}</option>`).join("");document.getElementById("fc").value=c;
+}
+function page(p){const M={dash:"nDash",an:"nAn",graph:"nGraph",pme:"nPME"};Object.keys(M).forEach(k=>{document.getElementById(k).style.display=k===p?"":"none";document.getElementById(M[k]).classList.toggle("active",k===p)});if(p==="an")an();if(p==="graph")charts();if(p==="pme"){pmeFilters();renderPME()}}
+function openForm(id){document.getElementById("modal").classList.add("show");document.querySelector("#modal form").reset();document.getElementById("id").value="";document.getElementById("mt").textContent=id?"Editar legalização":"Nova legalização";document.getElementById("data").value=new Date().toISOString().slice(0,10);document.getElementById("rev").value="R00";document.getElementById("approval").style.display="none";if(id){let x=d.find(y=>y.x===id);document.getElementById("id").value=x.x;document.getElementById("contrato").value=x.c;document.getElementById("unidade").value=x.u;document.getElementById("oes").value=x.o||"";document.getElementById("status").value=x.s;document.getElementById("data").value=x.dt;document.getElementById("valor").value=x.v;document.getElementById("rev").value=x.r;document.getElementById("eeat").value=x.e;if(approved(x)){let a=document.getElementById("approval");a.style.display="block";a.innerHTML=`<b>PME automática:</b> ${pme(x.a)} → ${money(x.v)}`}}}
+function closeForm(){document.getElementById("modal").classList.remove("show")}
+function saveItem(ev){ev.preventDefault();let id=document.getElementById("id").value||crypto.randomUUID(),s=document.getElementById("status").value,dt=document.getElementById("data").value,x={x:id,c:document.getElementById("contrato").value.trim(),u:document.getElementById("unidade").value.trim(),o:document.getElementById("oes").value.trim(),s,dt,v:+document.getElementById("valor").value||0,r:document.getElementById("rev").value.trim().toUpperCase()||"R00",e:document.getElementById("eeat").value.trim(),a:s==="Regular/Aprovado"?dt:null};let i=d.findIndex(y=>y.x===id);i>=0?d[i]=x:d.unshift(x);persist();render();closeForm();toast(s==="Regular/Aprovado"?`Aprovado → ${pme(dt)}: ${money(x.v)}`:"Legalização salva.")}
+function edit(id){openForm(id)}function del(id){let x=d.find(y=>y.x===id);if(confirm(`Excluir "${x.u}"?`)){d=d.filter(y=>y.x!==id);persist();render()}}function resetFilters(){["q","fc","fu"].forEach(x=>document.getElementById(x).value="");document.getElementById("fs").value="";document.getElementById("fr").value="";render()}
+function charts(){vigente();
+ let units=new Set(d.map(x=>x.c+"|"+x.u)),reg=new Set(d.filter(approved).map(x=>x.c+"|"+x.u)),tot=d.reduce((a,x)=>a+(+x.v||0),0),ap=d.filter(approved).reduce((a,x)=>a+(+x.v||0),0),now=new Date(),key=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}`,pm=d.filter(x=>approved(x)&&x.a.slice(0,7)===key).reduce((a,x)=>a+(+x.v||0),0);
+ document.getElementById("gu").textContent=units.size;document.getElementById("gr").textContent=reg.size;document.getElementById("gp").textContent=(units.size?Math.round(reg.size/units.size*100):0)+"%";document.getElementById("ga").textContent=money(ap);document.getElementById("gm").textContent=money(pm);
+ let mx=Math.max(tot,ap,1);document.getElementById("fb").innerHTML=[["Total",tot,""],["Aprovado",ap,"green"]].map(a=>`<div class="barcol"><div class="bval">${money(a[1])}</div><div class="bar ${a[2]}" style="height:${Math.max(5,a[1]/mx*175)}px"></div><div class="blab">${a[0]}</div></div>`).join("");
+ let map={};d.filter(approved).forEach(x=>map[x.a.slice(0,7)]=(map[x.a.slice(0,7)]||0)+(+x.v||0));let ks=Object.keys(map).sort().slice(-6),m=Math.max(...ks.map(k=>map[k]),1);document.getElementById("pb").innerHTML=ks.length?ks.map(k=>`<div class="barcol"><div class="bval">${money(map[k])}</div><div class="bar green" style="height:${Math.max(5,map[k]/m*175)}px"></div><div class="blab">PME${k.slice(5,7)}</div></div>`).join(""):"<div class='empty'>Ainda não há PME.</div>";
+ let st=contracts.map(c=>{let a=d.filter(x=>x.c===c),p=a.filter(approved);return{c,n:a.length,v:a.reduce((s,x)=>s+(+x.v||0),0),a:p.length,va:p.reduce((s,x)=>s+(+x.v||0),0)}}),mn=Math.max(...st.map(x=>x.n),1);document.getElementById("cb").innerHTML=st.map(x=>`<div class="crow"><b>${x.c}</b><div class="track"><div class="fill" style="width:${x.n/mn*80}%"><div class="fa" style="width:${x.n?x.a/x.n*100:0}%"></div></div><span class="tl"><b>${x.a}</b> aprovada${x.a===1?"":"s"} de <b>${x.n}</b> no total</span></div><div class="cv">${money(x.v)} total<br><span style="font-weight:400;color:var(--green)">${money(x.va)} aprovado</span></div></div>`).join("");
+ document.getElementById("lv").innerHTML=st.map(x=>{let p=x.n?Math.round(x.a/x.n*100):0;return`<div class="level"><b>${x.c}</b><div class="lt"><div class="lf" style="height:${p}%"></div></div><div class="pct">${p}%</div><small>${x.a}/${x.n} aprovadas</small></div>`}).join("");
+}
+function pmeFilters(){let pk0=document.getElementById("pk").value,ys=new Set([2026,...d.filter(approved).map(x=>+x.a.slice(0,4))]);py.innerHTML=[...ys].sort().map(y=>`<option>${y}</option>`).join("");pm.innerHTML=months.map((x,i)=>`<option value="${String(i+1).padStart(2,"0")}">${x}</option>`).join("");let n=new Date();py.value=n.getFullYear();pm.value=String(n.getMonth()+1).padStart(2,"0");let cs=[...contracts,...new Set(d.map(x=>x.c).filter(y=>!contracts.includes(y)))];document.getElementById("pk").innerHTML='<option value="">Todos os contratos</option>'+cs.map(x=>`<option>${esc(x)}</option>`).join("");document.getElementById("pk").value=pk0}
+function renderPME(){let ct=document.getElementById("pk").value,ok=x=>!ct||x.c===ct,k=`${py.value}-${pm.value}`,z=d.filter(x=>approved(x)&&ok(x)&&x.a.slice(0,7)===k),t=z.reduce((a,x)=>a+(+x.v||0),0),ac=d.filter(approved).filter(x=>ok(x)&&x.a.slice(0,7)<=k).reduce((a,x)=>a+(+x.v||0),0);pt.textContent=money(t);pc.textContent=z.length;pa.textContent=money(ac);z=srt(z,S.pme,sv);pbody.innerHTML=z.length?z.map(x=>`<tr><td>${esc(x.c)}</td><td>${esc(x.u)}</td><td><b>${esc(x.o)||"—"}</b></td><td>${date(x.a)}</td><td><b>${pme(x.a)}</b></td><td class="money">${money(x.v)}</td></tr>`).join(""):`<tr><td colspan="6" class="empty">Nenhuma aprovação nesta competência.</td></tr>`}
+function csv(){let h=["Contrato","Unidade","OES","Status","Data","Projeção R$","Revisão","EEAT","Data aprovação","PME"],rows=d.map(x=>[x.c,x.u,x.o||"",x.s,x.dt,x.v,x.r,x.e,x.a||"",approved(x)?pme(x.a):""]),txt=[h,...rows].map(r=>r.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(";")).join("\n"),a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+txt],{type:"text/csv;charset=utf-8"}));a.download="legalizacoes_pme.csv";a.click()}
+function toast(t){let x=document.getElementById("toast");x.textContent=t;x.classList.add("show");setTimeout(()=>x.classList.remove("show"),2500)}
+const S={dash:{k:"",d:1},pme:{k:"",d:1}};
+const sv=(x,k)=>({c:x.c,u:x.u,o:x.o,s:x.s,dt:x.dt,v:+x.v||0,r:x.r,e:x.e,a:approved(x)?x.a:""})[k];
+function srt(a,st,g){if(!st.k)return a;return [...a].sort((p,q)=>{let x=g(p,st.k),y=g(q,st.k),ex=x===""||x==null,ey=y===""||y==null;if(ex||ey)return ex&&ey?0:ex?1:-1;let r=typeof x==="number"&&typeof y==="number"?x-y:String(x).localeCompare(String(y),"pt-BR",{numeric:true,sensitivity:"base"});return r*st.d})}
+function markSort(){document.querySelectorAll("th.sort").forEach(th=>{let st=S[th.dataset.t],on=st.k===th.dataset.k;th.classList.toggle("on",on);th.querySelector(".ar").textContent=on?(st.d>0?"▲":"▼"):"↕"})}
+document.querySelectorAll("th.sort").forEach(th=>th.insertAdjacentHTML("beforeend",'<span class="ar"></span>'));
+document.addEventListener("click",e=>{let th=e.target.closest("th.sort");if(!th)return;let t=th.dataset.t,k=th.dataset.k,st=S[t];st.d=st.k===k?-st.d:1;st.k=k;markSort();t==="dash"?render():renderPME()});
+function exportJSON(){let a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(d,null,1)],{type:"application/json"}));a.download="dados.json";a.click()}
+function importJSON(ev){let f=ev.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let j=JSON.parse(r.result);if(!Array.isArray(j))throw 0;d=norm(j);persist();render();pmeFilters();toast(`${j.length} registros importados.`)}catch(e){alert("Arquivo inválido. Use um dados.json exportado por esta página.")}ev.target.value=""};r.readAsText(f)}
+const ST5=["Não iniciado","Em análise/Protocolado","Em andamento","Aguardando cliente","Regular/Aprovado"],COR=["#94a3b8","#3b82f6","#f59e0b","#a855f7","#16a34a"];
+let SEL=null;
+const allC=()=>[...contracts,...new Set(d.map(x=>x.c).filter(y=>!contracts.includes(y)))],pf=p=>p.toLocaleString("pt-BR",{maximumFractionDigits:1})+"%";
+function an(){
+ const all=allC();if(!SEL)SEL=new Set(all);SEL=new Set(all.filter(c=>SEL.has(c)));if(!SEL.size)SEL=new Set(all);
+ const sel=all.filter(c=>SEL.has(c)),G=id=>document.getElementById(id),cnt=(a,s)=>a.filter(x=>x.s===s).length,pc=(n,t)=>t?n/t*100:0;
+ G("chips").innerHTML=`<button class="chip ${sel.length===all.length?"on":""}" data-c="*">Todos</button>`+all.map(c=>`<button class="chip ${SEL.has(c)?"on":""}" data-c="${esc(c)}">${esc(c)}</button>`).join("");
+ const rows=d.filter(x=>SEL.has(x.c)),T=rows.length;
+ G("ankpi").innerHTML=`<div class="card"><div class="lbl">TOTAL DE UNIDADES</div><div class="metric">${T}</div><div class="sub" style="font-size:12px;margin-top:3px">${sel.length} contrato${sel.length===1?"":"s"}</div></div>`+ST5.map((s,i)=>{let n=cnt(rows,s);return`<div class="card" style="border-top:3px solid ${COR[i]}"><div class="lbl">${s.toUpperCase()}</div><div class="metric">${n}</div><div class="sub" style="font-size:12px;margin-top:3px">${pf(pc(n,T))} das unidades</div></div>`}).join("");
+ const mx=Math.max(...sel.map(c=>d.filter(x=>x.c===c).length),1);
+ G("anb").innerHTML=sel.map(c=>{let n=d.filter(x=>x.c===c).length;return`<div class="crow"><b>${esc(c)}</b><div class="track"><div class="fill" style="width:${n/mx*80}%"></div><span class="tl"><b>${n}</b> unidades</span></div><div class="cv">${pf(pc(n,T))} do total</div></div>`}).join("");
+ G("anleg").innerHTML=ST5.map((s,i)=>`<span style="--c:${COR[i]}">${s}</span>`).join("");
+ const gr=sel.map(c=>{let a=d.filter(x=>x.c===c);return{c,t:a.length,v:ST5.map(s=>cnt(a,s))}}),pm=Math.max(...gr.flatMap(g=>g.v.map(n=>pc(n,g.t))),1);
+ G("ang").innerHTML=gr.map(g=>`<div class="grp"><div class="gbars">${g.v.map((n,i)=>{let p=pc(n,g.t);return`<div class="gc" title="${ST5[i]}: ${n} (${pf(p)})"><div class="gv">${pf(p)}<small>${n}</small></div><i style="height:${p/pm*78}%;background:${COR[i]}"></i></div>`}).join("")}</div><div class="gname">${esc(g.c)}<small>${g.t} unidades</small></div></div>`).join("");
+}
+document.addEventListener("click",e=>{let b=e.target.closest(".chip");if(!b)return;let c=b.dataset.c,all=allC();if(c==="*")SEL=new Set(all);else if(SEL.size===all.length)SEL=new Set([c]);else SEL.has(c)?SEL.delete(c):SEL.add(c);an()});
+function vigente(){
+ const n=new Date(),Y=n.getFullYear(),M=n.getMonth()+1,key=`${Y}-${String(M).padStart(2,"0")}`,dias=new Date(Y,M,0).getDate(),hj=n.getDate(),z=d.filter(x=>approved(x)&&x.a.slice(0,7)===key),sm=a=>a.reduce((s,x)=>s+(+x.v||0),0),tot=sm(z),proj=tot/hj*dias;
+ const col=(id,it)=>{let m=Math.max(...it.map(i=>i.v),1);document.getElementById(id).innerHTML=it.map(i=>`<div class="barcol"><div class="bval">${money(i.v)}</div><div class="bar ${i.g}" style="height:${Math.max(5,i.v/m*175)}px"></div><div class="blab">${i.l}</div></div>`).join("")};
+ document.getElementById("vsub1").textContent=`PME${String(M).padStart(2,"0")} / ${Y} • ${z.length} aprovações • ${money(tot)}`;
+ col("vb",allC().map(c=>({l:c,v:sm(z.filter(x=>x.c===c)),g:"green"})));
+ document.getElementById("vsub2").textContent=`Dia ${hj} de ${dias} • ritmo de ${money(tot/hj)} por dia (projeção linear)`;
+ col("vp",[{l:"Realizado até hoje",v:tot,g:"green"},{l:"Projeção p/ fim do mês",v:proj,g:""}]);
+}
+async function boot(){try{let r=await fetch("dados.json",{cache:"no-store"});if(!r.ok)throw 0;let j=await r.json();if(!Array.isArray(j))throw 0;d=norm(j);let lm=r.headers.get("last-modified");if(lm)document.querySelector("#dash .sub").textContent+=" • Atualizado em "+new Date(lm).toLocaleDateString("pt-BR");render();pmeFilters()}catch(e){d=[];render();document.getElementById("body").innerHTML='<tr><td colspan="9" class="empty">Não foi possível carregar os dados (dados.json).</td></tr>'}}
+markSort();boot();
+</script>
+</body></html>
