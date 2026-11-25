@@ -40,24 +40,41 @@ aside{background:#07080b;border-right:1px solid var(--line)}nav button:hover,nav
 .gcols{display:flex;gap:22px;padding:8px 6px;overflow-x:auto}.grp{flex:1;min-width:170px}.gbars{height:230px;display:flex;align-items:flex-end;gap:6px;border-bottom:1px solid var(--line)}.gc{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;min-width:0}.gc i{display:block;width:100%;border-radius:5px 5px 0 0;min-height:2px}.gv{font-size:10px;font-weight:800;margin-bottom:3px;text-align:center;line-height:1.15}.gv small{display:block;font-weight:400;color:var(--muted)}.gname{text-align:center;font-weight:800;font-size:13px;margin-top:8px}.gname small{display:block;font-weight:400;color:var(--muted);font-size:11px}
 .leg.l5{flex-wrap:wrap}.leg.l5 span:before{background:var(--c)}
 @media(max-width:1050px){.cards.st .card:last-child{grid-column:auto}.cards.st6{grid-template-columns:repeat(3,1fr)}}@media(max-width:700px){.cards.st6{grid-template-columns:1fr 1fr}}
+body:not(.edit) .only-edit{display:none!important}
+.tswitch{display:flex;gap:6px;margin:0 0 16px}.tswitch button{flex:1;border:1px solid var(--line);background:transparent;color:#cbd5e1;border-radius:9px;padding:9px 6px;font-weight:800;font-size:12px}.tswitch button.on{background:var(--blue);border-color:var(--blue);color:#fff}
+/* Evolução e tendência */
+.cards.c4{grid-template-columns:repeat(4,1fr)}
+.evleg{display:flex;flex-wrap:wrap;gap:16px;font-size:11px;color:var(--muted);margin:8px 0 12px;align-items:center}.evleg span{display:inline-flex;align-items:center;gap:6px}
+.evsvg{width:100%;height:auto;display:block;margin-top:8px}.evsvg text{font-family:Arial,sans-serif}
+.evhead{display:flex;justify-content:space-between;align-items:baseline;gap:8px}.up{color:#4ade80}.down{color:#f87171}
+@media(max-width:1050px){.cards.c4{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
 <div class="app">
 <aside><div class="brand">LEGALIZAÇÕES<small>Controle de demandas • V2 PME</small></div>
+<div class="tswitch"><button id="tB" onclick="setTipo('Bombeiros')">🚒 Bombeiros</button><button id="tP" onclick="setTipo('Prefeitura')">🏛 Prefeitura</button></div>
 <nav>
 <button id="nDash" class="active" onclick="page('dash')">▦ Dashboard</button>
 <button id="nAn" onclick="page('an')">▥ Análise por contrato</button>
 <button id="nGraph" onclick="page('graph')">◈ Projeção financeira</button>
+<button id="nEv" onclick="page('ev')">↗ Evolução e tendência</button>
 <button id="nPME" onclick="page('pme')">R$ PME</button>
+<button class="only-edit" onclick="openForm()">＋ Nova legalização</button>
 <button onclick="csv()">⇩ Exportar CSV</button>
+<button class="only-edit" onclick="exportJSON()">⇩ Backup (dados.json)</button>
+<button class="only-edit" onclick="document.getElementById('imp').click()">⇧ Importar dados (substitui o tipo atual)</button>
+<button onclick="load(true)">↻ Atualizar dados</button>
+<button id="nLogin" onclick="loginToggle()">🔒 Entrar para editar</button>
+<div class="sub" id="mode" style="padding:10px 12px;font-size:11px">Modo visualização</div>
+<input id="imp" type="file" accept=".json,application/json" hidden onchange="importJSON(event)">
 </nav></aside>
 <main>
 <section id="dash">
-<div class="top"><div><h1>Controle de Legalizações</h1><div class="sub">Acompanhamento operacional e financeiro • Somente visualização</div></div></div>
+<div class="top"><div><h1>Controle de Legalizações</h1><div class="sub">Acompanhamento operacional e financeiro</div></div><button class="btn primary only-edit" onclick="openForm()">+ Nova legalização</button></div>
 <div class="cards st"><div class="card"><div class="lbl">TOTAL</div><div class="metric" id="total"></div></div><div class="card"><div class="lbl">NÃO INICIADO</div><div class="metric" id="naoiniciado"></div></div><div class="card"><div class="lbl">EM ANÁLISE/PROTOCOLADO</div><div class="metric" id="analise"></div></div><div class="card"><div class="lbl">EM ANDAMENTO</div><div class="metric" id="andamento"></div></div><div class="card"><div class="lbl">AGUARDANDO CLIENTE</div><div class="metric" id="cliente"></div></div><div class="card"><div class="lbl">REGULAR/APROVADO</div><div class="metric" id="aprovados"></div></div><div class="card"><div class="lbl">PROJEÇÃO TOTAL</div><div class="metric" id="projecao"></div></div></div>
 <div class="card"><div class="filters"><input id="q" class="field" placeholder="🔎 Contrato, unidade, OES ou EEAT" oninput="render()"><select id="fs" class="field" onchange="render()"><option value="">Todos os status</option><option>Não iniciado</option><option>Em análise/Protocolado</option><option>Em andamento</option><option>Aguardando cliente</option><option>Regular/Aprovado</option></select><select id="fr" class="field" onchange="render()"><option value="">Todas as revisões</option></select><select id="fc" class="field" onchange="render()"><option value="">Todos os contratos</option></select><input id="fu" class="field" placeholder="Unidade" oninput="render()"><button class="btn light" onclick="resetFilters()">Limpar</button></div></div>
-<div class="card table"><table><thead><tr><th class="sort" data-t="dash" data-k="c">Contrato</th><th class="sort" data-t="dash" data-k="u">Unidade</th><th class="sort" data-t="dash" data-k="o">OES</th><th class="sort" data-t="dash" data-k="s">Status</th><th class="sort" data-t="dash" data-k="dt">Data</th><th class="sort" data-t="dash" data-k="v">Projeção R$</th><th class="sort" data-t="dash" data-k="r">Revisão</th><th class="sort" data-t="dash" data-k="e">EEAT</th><th class="sort" data-t="dash" data-k="a">PME</th></tr></thead><tbody id="body"></tbody></table></div>
+<div class="card table"><table><thead><tr><th class="sort" data-t="dash" data-k="c">Contrato</th><th class="sort" data-t="dash" data-k="u">Unidade</th><th class="sort" data-t="dash" data-k="o">OES</th><th class="sort" data-t="dash" data-k="s">Status</th><th class="sort" data-t="dash" data-k="dt">Data</th><th class="sort" data-t="dash" data-k="v">Projeção R$</th><th class="sort" data-t="dash" data-k="r">Revisão</th><th class="sort" data-t="dash" data-k="e">EEAT</th><th class="sort" data-t="dash" data-k="a">PME</th><th class="only-edit">Ações</th></tr></thead><tbody id="body"></tbody></table></div>
 <div class="sub" style="font-size:11px;margin-top:10px">Regra: quando o status passa para Regular/Aprovado, a data informada gera a PME do respectivo mês.</div>
 </section>
 
@@ -72,37 +89,59 @@ aside{background:#07080b;border-right:1px solid var(--line)}nav button:hover,nav
 <div class="grid2"><div class="card"><b>Projeção financeira</b><div class="sub">Total x aprovados</div><div class="bars" id="fb"></div></div><div class="card"><b>PME por competência</b><div class="sub">Valor pela data de aprovação</div><div class="bars" id="pb"></div></div><div class="card wide"><b>Comparação entre contratos</b><div class="sub">CEF CE • CEF DF • CEF RJ LT2 • CEF RJ LT4 • CEF SP</div><div class="leg"><span>Total de unidades</span><span class="g">Aprovadas</span></div><div class="contracts" id="cb"></div></div><div class="card wide"><b>Nível de regularidade por contrato</b><div class="sub">Aprovadas ÷ unidades</div><div class="levels" id="lv"></div></div></div>
 </section>
 
+<section id="ev" style="display:none"><div class="top"><div><h1>Evolução e Tendência</h1><div class="sub" id="evsub"></div></div></div>
+<div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:16px"><div class="chips" id="evm" style="margin:0"><button class="chip on" data-m="v">PME (R$)</button><button class="chip" data-m="n">Nº de aprovações</button></div><label class="sub" style="font-size:12px;display:flex;align-items:center;gap:8px">Projetar <select id="evh" class="field" style="width:auto" onchange="EVH=+this.value;try{sessionStorage.setItem('evh',EVH)}catch(e){}ev()"></select></label></div>
+<div class="cards c4" id="evkpi"></div>
+<div class="card" style="margin-bottom:16px"><b>Evolução da média geral dos contratos</b><div class="sub" id="evavgsub"></div><div id="evavg"></div></div>
+<div class="evleg"><span><svg width="26" height="8"><line x1="0" x2="26" y1="4" y2="4" stroke="#3b82f6" stroke-width="2.6"/></svg>Realizado</span><span><svg width="26" height="8"><line x1="0" x2="26" y1="4" y2="4" stroke="#3b82f6" stroke-width="2" stroke-dasharray="7 5"/></svg>Projeção</span><span><svg width="26" height="8"><line x1="0" x2="26" y1="4" y2="4" stroke="#8b95a7" stroke-width="1.5" stroke-dasharray="2 4"/></svg>Tendência linear</span><span><svg width="12" height="12"><circle cx="6" cy="6" r="4" fill="#0f1115" stroke="#3b82f6" stroke-width="2"/></svg>Mês corrente (parcial)</span></div>
+<div class="grid2" id="evgrid"></div>
+<div class="sub" style="font-size:11px;margin-top:12px">Como é calculado: a janela anda sozinha a cada mês (sempre os últimos 6 meses até o mês atual + os meses de projeção escolhidos). Cada ponto soma as aprovações (Regular/Aprovado) pela data de aprovação. O mês corrente entra na tendência pelo ritmo diário (realizado ÷ dias decorridos × dias do mês). A tendência é uma reta de mínimos quadrados; valores projetados negativos são exibidos como zero.</div>
+</section>
+
 <section id="pme" style="display:none"><div class="top"><div><h1>Controle PME</h1><div class="sub">Competência financeira da aprovação/regularização</div></div></div>
 <div class="month"><select id="py" class="field" style="width:120px" onchange="renderPME()"></select><select id="pm" class="field" style="width:170px" onchange="renderPME()"></select><select id="pk" class="field" style="width:220px" onchange="renderPME()"><option value="">Todos os contratos</option></select></div>
 <div class="cards"><div class="card"><div class="lbl">PME DA COMPETÊNCIA</div><div class="metric" id="pt"></div></div><div class="card"><div class="lbl">APROVAÇÕES</div><div class="metric" id="pc"></div></div><div class="card"><div class="lbl">PME ACUMULADO</div><div class="metric" id="pa"></div></div></div>
 <div class="card table"><table class="pmetable"><thead><tr><th class="sort" data-t="pme" data-k="c">Contrato</th><th class="sort" data-t="pme" data-k="u">Unidade</th><th class="sort" data-t="pme" data-k="o">OES</th><th class="sort" data-t="pme" data-k="a">Data aprovação</th><th class="sort" data-t="pme" data-k="a">PME</th><th class="sort" data-t="pme" data-k="v">Projeção</th></tr></thead><tbody id="pbody"></tbody></table></div></section>
 </main></div>
 
+<div id="modal" class="modal" onclick="if(event.target===this)closeForm()"><div class="drawer"><div class="head"><h2 id="mt">Nova legalização</h2><button class="ico" onclick="closeForm()">✕</button></div>
+<form onsubmit="saveItem(event)"><input id="id" type="hidden"><div class="formgrid">
+<div class="group"><label>Contrato *</label><input id="contrato" class="field" required placeholder="CEF CE"></div><div class="group"><label>Unidade *</label><input id="unidade" class="field" required placeholder="Ag. Camocim"></div>
+<div class="group"><label>OES *</label><input id="oes" class="field" required placeholder="Nº da OES"></div><div class="group"><label>Tipo *</label><select id="tipo" class="field"><option>Bombeiros</option><option>Prefeitura</option></select></div>
+<div class="group"><label>Status *</label><select id="status" class="field"><option>Não iniciado</option><option>Em análise/Protocolado</option><option>Em andamento</option><option>Aguardando cliente</option><option>Regular/Aprovado</option></select></div>
+<div class="group"><label>Data da situação atual *</label><input id="data" class="field" type="date" required><div class="hint">Se Regular/Aprovado, esta data define a PME.</div></div>
+<div class="group"><label>Projeção financeira R$</label><input id="valor" class="field" type="number" min="0" step=".01"></div><div class="group"><label>Revisão</label><input id="rev" class="field" value="R00" placeholder="R00"></div>
+<div class="group full"><label>EEAT — observação atual *</label><textarea id="eeat" class="field" required placeholder="Ex.: Aguardando documentação complementar."></textarea></div>
+<div class="group"><label>Responsável</label><input id="resp" class="field"></div><div class="group"><label>Data de entrada</label><input id="entrada" class="field" type="date"></div>
+<div class="group"><label>Prazo</label><input id="prazo" class="field" type="date"></div><div class="approval full" id="approval"></div>
+</div><div class="actionsform"><button type="button" class="btn light" onclick="closeForm()">Cancelar</button><button class="btn primary">Salvar</button></div></form></div></div>
 <div id="toast" class="toast"></div>
 <script>
+const API="https://script.google.com/macros/s/AKfycbyPMiIKN1JWMMTfEfBcJqKZ8dLk3IVYBBKgJenXi3xcuOP8GJNe_d8a4NO3MN578AfKig/exec";
 const K="legalizacoes_pme_v2";
-let d=[];
-const ST_OLD={"Protocolado":"Em análise/Protocolado","Em análise":"Em análise/Protocolado"},norm=a=>a.map(x=>ST_OLD[x.s]?{...x,s:ST_OLD[x.s]}:x);d=norm(d);
+const OK=()=>typeof API==="string"&&API.indexOf("/exec")>0;
+let ALL=[],d=[],PW=sessionStorage.getItem("pw")||"",EDIT=false,TIPO=sessionStorage.getItem("tipo")||"Bombeiros";
+const ST_OLD={"Protocolado":"Em análise/Protocolado","Em análise":"Em análise/Protocolado"},norm=a=>a.map(x=>({...x,s:ST_OLD[x.s]||x.s,t:x.t||"Bombeiros"}));
 const contracts=["CEF CE","CEF DF","CEF RJ LT2","CEF RJ LT4","CEF SP"],months=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
 const money=n=>new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL"}).format(+n||0), date=s=>s?s.split("-").reverse().join("/"):"—";
 const approved=x=>x.s==="Regular/Aprovado"&&x.a;
 const pme=s=>s?`PME${s.slice(5,7)} / ${s.slice(0,4)}`:"—";
 const cls=s=>({"Não iniciado":0,"Em análise/Protocolado":1,"Em andamento":2,"Aguardando cliente":3,"Regular/Aprovado":5})[s];
 const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
-function persist(){localStorage.setItem(K,JSON.stringify(d))}
+
 function render(){
  let q=document.getElementById("q").value.toLowerCase(),s=document.getElementById("fs").value,r=document.getElementById("fr").value,c=document.getElementById("fc").value,u=document.getElementById("fu").value.toLowerCase();
  let z=d.filter(x=>(!q||[x.c,x.u,x.o,x.e].join(" ").toLowerCase().includes(q))&&(!s||x.s===s)&&(!r||x.r===r)&&(!c||x.c===c)&&(!u||x.u.toLowerCase().includes(u)));
- z=srt(z,S.dash,sv);document.getElementById("body").innerHTML=z.length?z.map(x=>`<tr><td><b>${esc(x.c)}</b></td><td>${esc(x.u)}</td><td><b>${esc(x.o)||"—"}</b></td><td><span class="status s${cls(x.s)}">${esc(x.s)}</span></td><td>${date(x.dt)}</td><td class="money">${money(x.v)}</td><td><b>${esc(x.r)}</b></td><td class="eeat" title="${esc(x.e)}">${esc(x.e)}</td><td><b>${approved(x)?pme(x.a):"—"}</b></td></tr>`).join(""):`<tr><td colspan="9" class="empty">Nenhuma legalização encontrada.</td></tr>`;
+ z=srt(z,S.dash,sv);document.getElementById("body").innerHTML=z.length?z.map(x=>`<tr><td><b>${esc(x.c)}</b></td><td>${esc(x.u)}</td><td><b>${esc(x.o)||"—"}</b></td><td><span class="status s${cls(x.s)}">${esc(x.s)}</span></td><td>${date(x.dt)}</td><td class="money">${money(x.v)}</td><td><b>${esc(x.r)}</b></td><td class="eeat" title="${esc(x.e)}">${esc(x.e)}</td><td><b>${approved(x)?pme(x.a):"—"}</b></td><td class="only-edit"><div class="actions"><button class="ico" onclick="edit('${x.x}')">✎</button><button class="ico" onclick="del('${x.x}')">🗑</button></div></td></tr>`).join(""):`<tr><td colspan="10" class="empty">Nenhuma legalização encontrada.</td></tr>`;
  const cd=c?d.filter(x=>x.c===c):d,n=s=>cd.filter(x=>x.s===s).length;document.getElementById("total").textContent=cd.length;document.getElementById("naoiniciado").textContent=n("Não iniciado");document.getElementById("andamento").textContent=n("Em andamento");document.getElementById("cliente").textContent=n("Aguardando cliente");document.getElementById("analise").textContent=n("Em análise/Protocolado");document.getElementById("aprovados").textContent=n("Regular/Aprovado");document.getElementById("projecao").textContent=money(cd.reduce((a,x)=>a+(+x.v||0),0));
  let rs=[...new Set(d.map(x=>x.r))];document.getElementById("fr").innerHTML='<option value="">Todas as revisões</option>'+rs.map(x=>`<option>${esc(x)}</option>`).join("");document.getElementById("fr").value=r;
  let cs=[...contracts,...new Set(d.map(x=>x.c).filter(y=>!contracts.includes(y)))];document.getElementById("fc").innerHTML='<option value="">Todos os contratos</option>'+cs.map(x=>`<option>${esc(x)}</option>`).join("");document.getElementById("fc").value=c;
 }
-function page(p){const M={dash:"nDash",an:"nAn",graph:"nGraph",pme:"nPME"};Object.keys(M).forEach(k=>{document.getElementById(k).style.display=k===p?"":"none";document.getElementById(M[k]).classList.toggle("active",k===p)});if(p==="an")an();if(p==="graph")charts();if(p==="pme"){pmeFilters();renderPME()}}
-function openForm(id){document.getElementById("modal").classList.add("show");document.querySelector("#modal form").reset();document.getElementById("id").value="";document.getElementById("mt").textContent=id?"Editar legalização":"Nova legalização";document.getElementById("data").value=new Date().toISOString().slice(0,10);document.getElementById("rev").value="R00";document.getElementById("approval").style.display="none";if(id){let x=d.find(y=>y.x===id);document.getElementById("id").value=x.x;document.getElementById("contrato").value=x.c;document.getElementById("unidade").value=x.u;document.getElementById("oes").value=x.o||"";document.getElementById("status").value=x.s;document.getElementById("data").value=x.dt;document.getElementById("valor").value=x.v;document.getElementById("rev").value=x.r;document.getElementById("eeat").value=x.e;if(approved(x)){let a=document.getElementById("approval");a.style.display="block";a.innerHTML=`<b>PME automática:</b> ${pme(x.a)} → ${money(x.v)}`}}}
+function page(p){const M={dash:"nDash",an:"nAn",graph:"nGraph",ev:"nEv",pme:"nPME"};Object.keys(M).forEach(k=>{document.getElementById(k).style.display=k===p?"":"none";document.getElementById(M[k]).classList.toggle("active",k===p)});if(p==="an")an();if(p==="graph")charts();if(p==="ev")ev();if(p==="pme"){pmeFilters();renderPME()}}
+function openForm(id){document.getElementById("modal").classList.add("show");document.querySelector("#modal form").reset();document.getElementById("id").value="";document.getElementById("mt").textContent=id?"Editar legalização":"Nova legalização";document.getElementById("data").value=new Date().toISOString().slice(0,10);document.getElementById("rev").value="R00";document.getElementById("tipo").value=TIPO;document.getElementById("approval").style.display="none";if(id){let x=d.find(y=>y.x===id);document.getElementById("id").value=x.x;document.getElementById("contrato").value=x.c;document.getElementById("unidade").value=x.u;document.getElementById("oes").value=x.o||"";document.getElementById("tipo").value=x.t||"Bombeiros";document.getElementById("status").value=x.s;document.getElementById("data").value=x.dt;document.getElementById("valor").value=x.v;document.getElementById("rev").value=x.r;document.getElementById("eeat").value=x.e;if(approved(x)){let a=document.getElementById("approval");a.style.display="block";a.innerHTML=`<b>PME automática:</b> ${pme(x.a)} → ${money(x.v)}`}}}
 function closeForm(){document.getElementById("modal").classList.remove("show")}
-function saveItem(ev){ev.preventDefault();let id=document.getElementById("id").value||crypto.randomUUID(),s=document.getElementById("status").value,dt=document.getElementById("data").value,x={x:id,c:document.getElementById("contrato").value.trim(),u:document.getElementById("unidade").value.trim(),o:document.getElementById("oes").value.trim(),s,dt,v:+document.getElementById("valor").value||0,r:document.getElementById("rev").value.trim().toUpperCase()||"R00",e:document.getElementById("eeat").value.trim(),a:s==="Regular/Aprovado"?dt:null};let i=d.findIndex(y=>y.x===id);i>=0?d[i]=x:d.unshift(x);persist();render();closeForm();toast(s==="Regular/Aprovado"?`Aprovado → ${pme(dt)}: ${money(x.v)}`:"Legalização salva.")}
-function edit(id){openForm(id)}function del(id){let x=d.find(y=>y.x===id);if(confirm(`Excluir "${x.u}"?`)){d=d.filter(y=>y.x!==id);persist();render()}}function resetFilters(){["q","fc","fu"].forEach(x=>document.getElementById(x).value="");document.getElementById("fs").value="";document.getElementById("fr").value="";render()}
+async function saveItem(ev){ev.preventDefault();let id=document.getElementById("id").value||crypto.randomUUID(),s=document.getElementById("status").value,dt=document.getElementById("data").value,x={x:id,c:document.getElementById("contrato").value.trim(),u:document.getElementById("unidade").value.trim(),o:document.getElementById("oes").value.trim(),t:document.getElementById("tipo").value,s,dt,v:+document.getElementById("valor").value||0,r:document.getElementById("rev").value.trim().toUpperCase()||"R00",e:document.getElementById("eeat").value.trim(),a:s==="Regular/Aprovado"?dt:null};try{await api({action:"save",item:x});await load();closeForm();toast(s==="Regular/Aprovado"?`Aprovado → ${pme(dt)}: ${money(x.v)}`:"Legalização salva.")}catch(e){alert(e.message)}}
+function edit(id){openForm(id)}async function del(id){let x=d.find(y=>y.x===id);if(confirm(`Excluir "${x.u}"?`)){try{await api({action:"delete",id});await load()}catch(e){alert(e.message)}}}function resetFilters(){["q","fc","fu"].forEach(x=>document.getElementById(x).value="");document.getElementById("fs").value="";document.getElementById("fr").value="";render()}
 function charts(){vigente();
  let units=new Set(d.map(x=>x.c+"|"+x.u)),reg=new Set(d.filter(approved).map(x=>x.c+"|"+x.u)),tot=d.reduce((a,x)=>a+(+x.v||0),0),ap=d.filter(approved).reduce((a,x)=>a+(+x.v||0),0),now=new Date(),key=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}`,pm=d.filter(x=>approved(x)&&x.a.slice(0,7)===key).reduce((a,x)=>a+(+x.v||0),0);
  document.getElementById("gu").textContent=units.size;document.getElementById("gr").textContent=reg.size;document.getElementById("gp").textContent=(units.size?Math.round(reg.size/units.size*100):0)+"%";document.getElementById("ga").textContent=money(ap);document.getElementById("gm").textContent=money(pm);
@@ -121,8 +160,8 @@ function srt(a,st,g){if(!st.k)return a;return [...a].sort((p,q)=>{let x=g(p,st.k
 function markSort(){document.querySelectorAll("th.sort").forEach(th=>{let st=S[th.dataset.t],on=st.k===th.dataset.k;th.classList.toggle("on",on);th.querySelector(".ar").textContent=on?(st.d>0?"▲":"▼"):"↕"})}
 document.querySelectorAll("th.sort").forEach(th=>th.insertAdjacentHTML("beforeend",'<span class="ar"></span>'));
 document.addEventListener("click",e=>{let th=e.target.closest("th.sort");if(!th)return;let t=th.dataset.t,k=th.dataset.k,st=S[t];st.d=st.k===k?-st.d:1;st.k=k;markSort();t==="dash"?render():renderPME()});
-function exportJSON(){let a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(d,null,1)],{type:"application/json"}));a.download="dados.json";a.click()}
-function importJSON(ev){let f=ev.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let j=JSON.parse(r.result);if(!Array.isArray(j))throw 0;d=norm(j);persist();render();pmeFilters();toast(`${j.length} registros importados.`)}catch(e){alert("Arquivo inválido. Use um dados.json exportado por esta página.")}ev.target.value=""};r.readAsText(f)}
+function exportJSON(){let a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(ALL,null,1)],{type:"application/json"}));a.download="dados.json";a.click()}
+function importJSON(ev){let f=ev.target.files[0];ev.target.value="";if(!f)return;let r=new FileReader();r.onload=async()=>{try{let j=JSON.parse(r.result);if(!Array.isArray(j))throw new Error("Arquivo inválido. Use um dados.json.");if(!confirm(`Enviar ${j.length} registros e SUBSTITUIR os dados de ${TIPO.toUpperCase()}? (o outro tipo não é alterado)`))return;await api({action:"replace",tipo:TIPO,items:norm(j).map(x=>({...x,x:String(x.x),t:TIPO}))});await load();toast(`${j.length} registros importados em ${TIPO}.`)}catch(e){alert(e.message||"Arquivo inválido.")}};r.readAsText(f)}
 const ST5=["Não iniciado","Em análise/Protocolado","Em andamento","Aguardando cliente","Regular/Aprovado"],COR=["#94a3b8","#3b82f6","#f59e0b","#a855f7","#16a34a"];
 let SEL=null;
 const allC=()=>[...contracts,...new Set(d.map(x=>x.c).filter(y=>!contracts.includes(y)))],pf=p=>p.toLocaleString("pt-BR",{maximumFractionDigits:1})+"%";
@@ -138,7 +177,7 @@ function an(){
  const gr=sel.map(c=>{let a=d.filter(x=>x.c===c);return{c,t:a.length,v:ST5.map(s=>cnt(a,s))}}),pm=Math.max(...gr.flatMap(g=>g.v.map(n=>pc(n,g.t))),1);
  G("ang").innerHTML=gr.map(g=>`<div class="grp"><div class="gbars">${g.v.map((n,i)=>{let p=pc(n,g.t);return`<div class="gc" title="${ST5[i]}: ${n} (${pf(p)})"><div class="gv">${pf(p)}<small>${n}</small></div><i style="height:${p/pm*78}%;background:${COR[i]}"></i></div>`}).join("")}</div><div class="gname">${esc(g.c)}<small>${g.t} unidades</small></div></div>`).join("");
 }
-document.addEventListener("click",e=>{let b=e.target.closest(".chip");if(!b)return;let c=b.dataset.c,all=allC();if(c==="*")SEL=new Set(all);else if(SEL.size===all.length)SEL=new Set([c]);else SEL.has(c)?SEL.delete(c):SEL.add(c);an()});
+document.addEventListener("click",e=>{let b=e.target.closest(".chip[data-c]");if(!b)return;let c=b.dataset.c,all=allC();if(c==="*")SEL=new Set(all);else if(SEL.size===all.length)SEL=new Set([c]);else SEL.has(c)?SEL.delete(c):SEL.add(c);an()});
 function vigente(){
  const n=new Date(),Y=n.getFullYear(),M=n.getMonth()+1,key=`${Y}-${String(M).padStart(2,"0")}`,dias=new Date(Y,M,0).getDate(),hj=n.getDate(),z=d.filter(x=>approved(x)&&x.a.slice(0,7)===key),sm=a=>a.reduce((s,x)=>s+(+x.v||0),0),tot=sm(z),proj=tot/hj*dias;
  const col=(id,it)=>{let m=Math.max(...it.map(i=>i.v),1);document.getElementById(id).innerHTML=it.map(i=>`<div class="barcol"><div class="bval">${money(i.v)}</div><div class="bar ${i.g}" style="height:${Math.max(5,i.v/m*175)}px"></div><div class="blab">${i.l}</div></div>`).join("")};
@@ -147,7 +186,72 @@ function vigente(){
  document.getElementById("vsub2").textContent=`Dia ${hj} de ${dias} • ritmo de ${money(tot/hj)} por dia (projeção linear)`;
  col("vp",[{l:"Realizado até hoje",v:tot,g:"green"},{l:"Projeção p/ fim do mês",v:proj,g:""}]);
 }
-async function boot(){try{let r=await fetch("dados.json",{cache:"no-store"});if(!r.ok)throw 0;let j=await r.json();if(!Array.isArray(j))throw 0;d=norm(j);let lm=r.headers.get("last-modified");if(lm)document.querySelector("#dash .sub").textContent+=" • Atualizado em "+new Date(lm).toLocaleDateString("pt-BR");render();pmeFilters()}catch(e){d=[];render();document.getElementById("body").innerHTML='<tr><td colspan="9" class="empty">Não foi possível carregar os dados (dados.json).</td></tr>'}}
-markSort();boot();
+
+/* ===== Evolução e tendência (janela móvel: 6 meses + projeção) ===== */
+const addM=(k,n)=>{let y=+k.slice(0,4),m=+k.slice(5,7)-1+n;y+=Math.floor(m/12);m=((m%12)+12)%12;return`${y}-${String(m+1).padStart(2,"0")}`};
+const curKey=()=>{const n=new Date();return`${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,"0")}`};
+let EVH=3,EV_BASE=[],EV_PROJ=[],EV_ALL=[];try{EVH=+sessionStorage.getItem("evh")||3}catch(e){}
+function evWin(){const c=curKey();EV_BASE=[...Array(6)].map((_,i)=>addM(c,i-5));EV_PROJ=[...Array(EVH)].map((_,i)=>addM(c,i+1));EV_ALL=[...EV_BASE,...EV_PROJ]}
+const EVC=["#3b82f6","#16a34a","#f59e0b","#a855f7","#ef4444","#06b6d4","#ec4899","#84cc16"],EVX={muted:"#8b95a7",line:"#252a35",txt:"#e8ecf3",card:"#0f1115",blue:"#2563eb"};
+let EVM="v";
+const mlab=k=>months[+k.slice(5,7)-1].slice(0,3)+"/"+k.slice(2,4);
+const fmtC=v=>EVM==="n"?(Math.round(v*10)/10).toLocaleString("pt-BR"):v>=1e6?"R$ "+(v/1e6).toLocaleString("pt-BR",{maximumFractionDigits:1})+" mi":v>=1e3?"R$ "+(v/1e3).toLocaleString("pt-BR",{maximumFractionDigits:1})+" mil":"R$ "+Math.round(v);
+const fmtF=v=>EVM==="n"?(Math.round(v*10)/10).toLocaleString("pt-BR")+" aprov.":money(v);
+function evSeries(rows){
+ const n=new Date(),cur=`${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,"0")}`,dias=new Date(n.getFullYear(),n.getMonth()+1,0).getDate(),hj=n.getDate();
+ return EV_ALL.map(k=>{if(k>cur)return{k,real:null,fit:null};const z=rows.filter(x=>approved(x)&&x.a.slice(0,7)===k),v=EVM==="v"?z.reduce((s,x)=>s+(+x.v||0),0):z.length;return{k,real:v,fit:k===cur?v/hj*dias:v,part:k===cur}});
+}
+function evReg(s){const p=s.map((o,i)=>[i,o.fit]).filter(q=>q[1]!=null);if(p.length<2)return null;const n=p.length,mx=p.reduce((a,q)=>a+q[0],0)/n,my=p.reduce((a,q)=>a+q[1],0)/n;let sxy=0,sxx=0;p.forEach(([x,y])=>{sxy+=(x-mx)*(y-my);sxx+=(x-mx)**2});const b=sxx?sxy/sxx:0,a=my-b*mx;return{a,b,at:i=>Math.max(0,a+b*i)}}
+function evStats(s){const rg=evReg(s),base=s.filter(o=>EV_BASE.includes(o.k)&&o.real!=null).reduce((a,o)=>a+o.real,0),pj=EV_PROJ.reduce((a,k)=>{const i=EV_ALL.indexOf(k),o=s[i];return a+(o.real!=null?o.real:rg?rg.at(i):0)},0);return{rg,base,pj}}
+const evTrend=rg=>rg?`<span class="${rg.b>=0?"up":"down"}">${rg.b>=0?"▲":"▼"} ${fmtF(Math.abs(rg.b))}/mês</span>`:`<span class="sub">dados insuficientes</span>`;
+function evSVG(s,cor,ghosts){
+ const W=640,H=250,L=66,R=14,T=28,B=30,N=s.length,dense=N>12,st=(W-L-R)/(N-1),X=i=>L+i*st,rg=evReg(s),tr=rg?s.map((_,i)=>rg.at(i)):[],li=s.reduce((m,o,i)=>o.real!=null?i:m,-1);
+ const mx=Math.max(1,...s.map(o=>Math.max(o.real||0,o.fit||0)),...tr,...(ghosts||[]).flatMap(g=>g.s.map(o=>o.real||0)))*1.18,Y=v=>T+(H-T-B)*(1-v/mx),P=a=>a.map(([i,v])=>`${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join(" ");
+ const zx=X(EV_ALL.indexOf(EV_PROJ[0]))-st/2;
+ let g=`<svg class="evsvg" viewBox="0 0 ${W} ${H}" role="img">`;
+ g+=`<rect x="${zx}" y="${T-22}" width="${W-zx}" height="${H-B-T+22}" fill="${EVX.blue}" opacity=".09" rx="6"/><text x="${W-6}" y="${T-9}" text-anchor="end" font-size="10" fill="${EVX.muted}">Projeção</text>`;
+ for(let k=0;k<=4;k++){const v=mx*k/4,y=Y(v);g+=`<line x1="${L}" x2="${W-R}" y1="${y}" y2="${y}" stroke="${EVX.line}"/><text x="${L-8}" y="${y+3}" text-anchor="end" font-size="10" fill="${EVX.muted}">${fmtC(v)}</text>`}
+ s.forEach((o,i)=>g+=`<text x="${X(i)}" y="${H-10}" text-anchor="middle" font-size="${dense?8.5:10}" fill="${EV_PROJ.includes(o.k)?"#93c5fd":EVX.muted}">${mlab(o.k)}</text>`);
+ (ghosts||[]).forEach(gh=>{const pts=gh.s.map((o,i)=>[i,o.real]).filter(q=>q[1]!=null);if(pts.length>1)g+=`<polyline points="${P(pts)}" fill="none" stroke="${gh.cor}" stroke-width="1.5" opacity=".45"><title>${esc(gh.c)}</title></polyline>`});
+ if(rg)g+=`<polyline points="${P(tr.map((v,i)=>[i,v]))}" fill="none" stroke="${EVX.muted}" stroke-width="1.5" stroke-dasharray="2 4"><title>Tendência: ${fmtF(rg.b)}/mês</title></polyline>`;
+ const real=s.map((o,i)=>[i,o.real]).filter(q=>q[1]!=null);
+ if(real.length>1)g+=`<polyline points="${P(real)}" fill="none" stroke="${cor}" stroke-width="2.6" stroke-linejoin="round"/>`;
+ if(rg&&li>=0&&li<N-1){
+  const pr=[[li,s[li].fit],...tr.map((v,i)=>[i,v]).slice(li+1)];
+  g+=`<polyline points="${P(pr)}" fill="none" stroke="${cor}" stroke-width="2" stroke-dasharray="7 5" opacity=".9"/>`;
+  for(let i=li+1;i<N;i++)g+=`<circle cx="${X(i)}" cy="${Y(tr[i])}" r="4" fill="${EVX.card}" stroke="${cor}" stroke-width="2"><title>${mlab(s[i].k)} (projeção): ${fmtF(tr[i])}</title></circle>${!dense||i===N-1?`<text x="${X(i)}" y="${Y(tr[i])-9}" text-anchor="middle" font-size="10" font-style="italic" fill="${cor}">${fmtC(tr[i])}</text>`:""}`;
+ }
+ real.forEach(([i,v])=>{const o=s[i];
+  if(o.part&&Math.abs(o.fit-v)>1e-9)g+=`<line x1="${X(i)}" x2="${X(i)}" y1="${Y(v)}" y2="${Y(o.fit)}" stroke="${cor}" stroke-dasharray="2 3" opacity=".7"/><circle cx="${X(i)}" cy="${Y(o.fit)}" r="2.5" fill="${cor}"><title>Pelo ritmo atual, ${mlab(o.k)} fecharia em ${fmtF(o.fit)}</title></circle>`;
+  g+=`<circle cx="${X(i)}" cy="${Y(v)}" r="4.5" fill="${o.part?EVX.card:cor}" stroke="${cor}" stroke-width="2"><title>${mlab(o.k)}${o.part?" (parcial)":""}: ${fmtF(v)}</title></circle><text x="${X(i)}" y="${Y(o.part?Math.max(v,o.fit):v)-9}" text-anchor="middle" font-size="10" font-weight="700" fill="${EVX.txt}">${fmtC(v)}</text>`});
+ return g+"</svg>";
+}
+function ev(){
+ const G=id=>document.getElementById(id);evWin();
+ const rb=`${mlab(EV_BASE[0])}–${mlab(EV_BASE[5])}`,rp=EVH>1?`${mlab(EV_PROJ[0])}–${mlab(EV_PROJ[EVH-1])}`:mlab(EV_PROJ[0]);
+ G("evh").innerHTML=[...Array(12)].map((_,i)=>`<option value="${i+1}">${i+1} ${i?"meses":"mês"} (até ${mlab(addM(curKey(),i+1))})</option>`).join("");G("evh").value=EVH;
+ G("evsub").textContent=`Realizado de ${mlab(EV_BASE[0])} a ${mlab(EV_BASE[5])} (mês atual parcial) • linha de tendência linear • projeção de ${rp.replace("–"," a ")}`;
+ document.querySelectorAll("#evm .chip").forEach(b=>b.classList.toggle("on",b.dataset.m===EVM));
+ const cs=allC(),per=cs.map((c,i)=>({c,cor:EVC[i%EVC.length],s:evSeries(d.filter(x=>x.c===c))})),nC=Math.max(cs.filter(c=>d.some(x=>x.c===c)).length,1);
+ const tot=evSeries(d),avg=tot.map(o=>({...o,real:o.real==null?null:o.real/nC,fit:o.fit==null?null:o.fit/nC})),sT=evStats(tot),sA=evStats(avg),mb=tot.filter(o=>EV_BASE.includes(o.k)&&o.real!=null).length||1;
+ G("evkpi").innerHTML=[[`REALIZADO ${rb.toUpperCase()}`,fmtF(sT.base)],["MÉDIA MENSAL POR CONTRATO",fmtF(sT.base/mb/nC)],["TENDÊNCIA DA MÉDIA",evTrend(sA.rg)],[`PROJEÇÃO ${rp.toUpperCase()} (TOTAL)`,fmtF(sT.pj)]].map(([l,v])=>`<div class="card"><div class="lbl">${l}</div><div class="metric" style="font-size:20px">${v}</div></div>`).join("");
+ G("evavgsub").innerHTML=`Média mensal de ${nC} contrato${nC===1?"":"s"} com registros • linhas finas = cada contrato • tendência ${evTrend(sA.rg)} • projeção ${rp}: <b>${fmtF(sA.pj)}</b> por contrato`;
+ G("evavg").innerHTML=evSVG(avg,EVX.txt,per)+`<div class="evleg">${per.map(p=>`<span><i style="width:14px;height:3px;background:${p.cor};display:inline-block;border-radius:2px"></i>${esc(p.c)}</span>`).join("")}</div>`;
+ G("evgrid").innerHTML=per.map(p=>{const st=evStats(p.s);return`<div class="card"><div class="evhead"><b style="color:${p.cor}">${esc(p.c)}</b><span style="font-size:12px;font-weight:800">${evTrend(st.rg)}</span></div><div class="sub" style="font-size:12px;margin-top:3px">${rb}: <b>${fmtF(st.base)}</b> • Projeção ${rp}: <b>${fmtF(st.pj)}</b></div>${evSVG(p.s,p.cor)}</div>`}).join("");
+}
+document.addEventListener("click",e=>{let b=e.target.closest("#evm .chip");if(!b)return;EVM=b.dataset.m;ev()});
+
+async function api(body){if(!OK())throw new Error("Falta o endereço do Apps Script no código.");const r=await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({...body,senha:PW})});const j=await r.json();if(!j.ok)throw new Error(j.error||"Erro ao gravar.");return j}
+async function load(manual,first){const G=id=>document.getElementById(id),vis=id=>G(id).style.display!=="none";try{if(!OK())throw 0;const r=await fetch(API+"?t="+Date.now(),{cache:"no-store"});const j=await r.json();if(!j.ok)throw 0;ALL=norm(j.items);setD();render();if(first)pmeFilters();views();if(manual)toast("Dados atualizados.")}catch(e){G("body").innerHTML='<tr><td colspan="10" class="empty">Não foi possível carregar os dados. Confira o endereço do Apps Script no código.</td></tr>'}}
+function setMode(on){EDIT=on;document.body.classList.toggle("edit",on);document.getElementById("nLogin").textContent=on?"🔓 Sair do modo edição":"🔒 Entrar para editar";document.getElementById("mode").textContent=on?"Modo edição":"Modo visualização"}
+async function loginToggle(){if(EDIT){PW="";sessionStorage.removeItem("pw");setMode(false);return}let s=prompt("Senha de edição:");if(!s)return;PW=s;try{await api({action:"check"});sessionStorage.setItem("pw",s);setMode(true);toast("Modo edição ativado.")}catch(e){PW="";alert(e.message)}}
+async function start(){if(PW){try{await api({action:"check"});setMode(true)}catch(e){PW="";sessionStorage.removeItem("pw")}}document.getElementById("body").innerHTML='<tr><td colspan="10" class="empty">Carregando dados...</td></tr>';await load(false,true)}
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)load()});
+setInterval(()=>{if(!document.hidden&&!document.getElementById("modal").classList.contains("show"))load()},60000);
+const setD=()=>{d=ALL.filter(x=>x.t===TIPO)};
+function views(){const vis=id=>document.getElementById(id).style.display!=="none";if(vis("an"))an();if(vis("graph"))charts();if(vis("ev"))ev();if(vis("pme"))renderPME()}
+function skin(){document.title="Legalizações "+TIPO+" — V2 PME";[["dash","Legalizações "+TIPO],["an","Análise por Contrato • "+TIPO],["graph","Projeção Financeira e PME • "+TIPO],["ev","Evolução e Tendência • "+TIPO],["pme","Controle PME • "+TIPO]].forEach(([id,t])=>document.querySelector("#"+id+" h1").textContent=t);document.getElementById("tB").classList.toggle("on",TIPO==="Bombeiros");document.getElementById("tP").classList.toggle("on",TIPO==="Prefeitura")}
+function setTipo(t){TIPO=t;try{sessionStorage.setItem("tipo",t)}catch(e){}setD();skin();render();pmeFilters();views()}
+markSort();skin();render();pmeFilters();start();
 </script>
 </body></html>
